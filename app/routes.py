@@ -8,6 +8,12 @@ def home():
     return render_template('home.html')
 
 
+# Pág cadastrar
+@app.route('/cadastrar/', methods=['POST'])
+def cadastrar():
+    pass
+
+
 # Pág end
 @app.route('/end/')
 def end():
