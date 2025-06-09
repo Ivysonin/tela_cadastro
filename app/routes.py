@@ -1,5 +1,6 @@
 from app import app
-from flask import render_template
+from flask import render_template, redirect, url_for
+from app.forms import UsersForm
 
 
 # Pág home
@@ -9,9 +10,13 @@ def home():
 
 
 # Pág cadastrar
-@app.route('/cadastrar/', methods=['POST'])
+@app.route('/cadastrar/', methods=['GET','POST'])
 def cadastrar():
-    pass
+    form = UsersForm()
+    if form.validate_on_submit:
+        form.save()
+        return redirect(url_for('end'))
+    return render_template('cadastrar.html')
 
 
 # Pág end
