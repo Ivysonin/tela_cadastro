@@ -13,10 +13,10 @@ def home():
 @app.route('/cadastrar/', methods=['GET','POST'])
 def cadastrar():
     form = UsersForm()
-    if form.validate_on_submit:
+    if form.validate_on_submit():
         form.save()
         return redirect(url_for('end'))
-    return render_template('cadastrar.html')
+    return render_template('cadastrar.html', form=form)
 
 
 # Pág end
