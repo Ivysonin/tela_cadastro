@@ -1,6 +1,6 @@
 # 📋 Tela Cadastro
 
-Projeto de sistema web para cadastro de usuários, desenvolvido com Python e Flask. Focado em praticar rotas, formulários e interação com banco de dados.
+Projeto de um sistema web para cadastro de usuários, desenvolvido com Python e Flask. O principal objetivo é praticar a lógica de cadastro, validação de dados e a interação com um banco de dados.
 
 ## 🚀 Funcionalidades
 
@@ -45,11 +45,15 @@ pip install -r requirements.txt
 python run.py
 ```
 
+
 ## 📖 Aprendizados
 
-- Estruturação de aplicações Flask com rotas e templates
+- Estruturação de aplicações Flask
 - Manipulação de formulários e envio de dados via POST
 - Validação customizada para evitar duplicidade de dados
 - Hash de senhas para segurança usando Flask-Bcrypt
 - Integração com banco de dados usando SQLite
 - Uso de variáveis de ambiente para manter configurações sensíveis fora do código
+
+## 📸 Imagens
+![Imagem tela cadastro](https://github.com/user-attachments/assets/67b21400-91fc-441f-9f14-827cc12886bf)
