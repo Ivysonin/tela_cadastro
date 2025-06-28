@@ -17,8 +17,8 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
 login_manager = LoginManager(app)
-login_manager.login_view = 'home'
+login_manager.login_view = 'cadastrar'
 bcrypt = Bcrypt(app)
 
-from app.routes import home
+from app.routes import cadastrar
 from app.models import Users
