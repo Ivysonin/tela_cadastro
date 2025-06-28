@@ -55,5 +55,5 @@ python run.py
 - Integração com banco de dados usando SQLite
 - Uso de variáveis de ambiente para manter configurações sensíveis fora do código
 
-## 📸 Imagens
+## 📸 Imagem
 ![Imagem tela cadastro](https://github.com/user-attachments/assets/67b21400-91fc-441f-9f14-827cc12886bf)
