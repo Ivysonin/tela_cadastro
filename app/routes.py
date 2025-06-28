@@ -1,6 +1,7 @@
 from app import app
 from flask import render_template, redirect, url_for
 from app.forms import UsersForm
+from flask_login import login_user, login_required
 
 
 # Pág home
@@ -14,12 +15,14 @@ def home():
 def cadastrar():
     form = UsersForm()
     if form.validate_on_submit():
-        form.save()
+        user = form.save()
+        login_user(user, remember=True)
         return redirect(url_for('end'))
     return render_template('cadastrar.html', form=form)
 
 
 # Pág end
 @app.route('/end/')
+@login_required
 def end():
     return render_template('end.html')
