@@ -57,3 +57,7 @@ python run.py
 
 ## 📸 Imagem
 ![Imagem tela cadastro](https://github.com/user-attachments/assets/67b21400-91fc-441f-9f14-827cc12886bf)
+
+## 📄 Licença
+
+Este projeto está licenciado sob os termos da [Licença MIT](./LICENSE), com cláusula adicional de atribuição.
