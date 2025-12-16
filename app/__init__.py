@@ -1,24 +1,33 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-import os
 from flask_login import LoginManager
-from flask_bcrypt import Bcrypt
-from dotenv import load_dotenv
-load_dotenv('.env')
+from app.config import Config
 
-app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URI')
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
+db = SQLAlchemy()
+migrate = Migrate()
+login_manager = LoginManager()
 
-db = SQLAlchemy(app)
-migrate = Migrate(app, db)
 
-login_manager = LoginManager(app)
-login_manager.login_view = 'cadastrar'
-bcrypt = Bcrypt(app)
+def create_app():
+    app = Flask(__name__)
+    app.config.from_object(Config)
 
-from app.routes import cadastrar
-from app.models import Users
+    db.init_app(app)
+    migrate.init_app(app, db)
+    login_manager.init_app(app)
+
+    from app.controllers.auth_controller import auth_bp
+    from app.controllers.user_controller import user_bp
+    app.register_blueprint(user_bp, url_prefix="/user")
+    app.register_blueprint(auth_bp, url_prefix="/auth")
+
+    from app.models import user_model
+    from app.models.user_model import User
+
+    @login_manager.user_loader
+    def load_user(user_id):
+        return db.session.get(User, int(user_id))
+    
+    return app
