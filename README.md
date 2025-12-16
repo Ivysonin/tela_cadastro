@@ -57,8 +57,6 @@ DATABASE_URI='sqlite:///database.db'
 ### 4. Inicializar o banco
 
 ```bash
-flask db init
-flask db migrate
 flask db upgrade
 ```
 
