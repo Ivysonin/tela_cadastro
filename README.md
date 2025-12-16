@@ -1,63 +1,96 @@
-# 📋 Tela Cadastro
+# 🚀 API de Autenticação e Usuários
 
-Projeto de um sistema web para cadastro de usuários, desenvolvido com Python e Flask. O principal objetivo é praticar a lógica de cadastro, validação de dados e a interação com um banco de dados.
+API REST desenvolvida em **Python + Flask** para gerenciamento de **autenticação** e **perfil de usuários**. O projeto segue separação clara de responsabilidades entre **Auth** (autenticação) e **User** (domínio do usuário), com foco em boas práticas, validação de dados e segurança.
 
-## 🚀 Funcionalidades
+---
 
-- Cadastro de usuários com validação de dados
+## 🎯 Objetivo
+
+Fornecer uma API simples, limpa e escalável para:
+
+* Registro de usuários
+* Autenticação (login/logout)
+* Gerenciamento de perfil do usuário autenticado
+
+Este projeto é voltado para estudo e prática de **arquitetura backend**, **validação**, **segurança** e **organização de código**.
+
+---
 
 ## 🛠 Tecnologias Utilizadas
 
-- Python
-- Flask
-- Flask-WTF (para formulários e validação)
-- Flask-Login (para controle de sessão)
-- Flask-Bcrypt (para hash de senhas)
-- SQLite (via SQLAlchemy)
-- HTML + CSS
-- Bootstrap (para estilização dos templates)
+* Python
+* Flask
+* Flask-Login
+* Marshmallow (validação de dados)
+* SQLAlchemy
+* SQLite
+* Werkzeug (hash de senha)
 
-## ⚙️ Variáveis de Ambiente
+---
 
-Antes de rodar a aplicação, crie um arquivo `.env` na raiz do projeto com as seguintes variáveis:
 
-```
-SECRET_KEY=sua_chave_secreta_aqui
-DATABASE_URI=sqlite:///database.db
-```
+## 🔌 **Como Rodar o Projeto**
 
-## 💻 Como Rodar Localmente
+### 1. Criar ambiente virtual
 
 ```bash
-# clone o repositorio
-git clone https://github.com/Ivysonin/tela_cadastro.git
-
-# Crie o ambiente virtual
 python -m venv venv
-
-# Ative no Windows
-venv\Scripts\activate
-
-# Instale as dependências
-pip install -r requirements.txt
-
-# Rode o servidor
-python run.py
+source venv/bin/activate  # Linux
+venv\Scripts\activate     # Windows
 ```
 
+### 2. Instalar dependências
 
-## 📖 Aprendizados
+```bash
+pip install -r requirements.txt
+```
 
-- Estruturação de aplicações Flask
-- Manipulação de formulários e envio de dados via POST
-- Validação customizada para evitar duplicidade de dados
-- Hash de senhas para segurança usando Flask-Bcrypt
-- Integração com banco de dados usando SQLite
-- Uso de variáveis de ambiente para manter configurações sensíveis fora do código
+### 3. Configurar variáveis de ambiente
 
-## 📸 Imagem
-![Imagem tela cadastro](https://github.com/user-attachments/assets/67b21400-91fc-441f-9f14-827cc12886bf)
+Crie um `.env`:
+
+```
+SECRET_KEY='chave_secreta'
+DATABASE_URI='sqlite:///database.db'
+```
+
+### 4. Inicializar o banco
+
+```bash
+flask db init
+flask db migrate
+flask db upgrade
+```
+
+### 5. Executar o servidor
+
+```bash
+flask run
+```
+
+---
+
+## 📌 **Endpoints disponíveis**
+
+### 🔐 Autenticação
+
+| Método | URL            | Descrição              |
+| ------ | -------------- | ---------------------- |
+| POST   | /auth/register | Registra novo usuário  |
+| POST   | /auth/login    | Login do usuário       |
+| POST   | /auth/logout   | Logout do usuário      |
+
+---
+
+### 👤 Usuário
+
+| Método | URL             | Descrição              |
+| ------ | --------------- | ---------------------- |
+| GET    | /users/perfil   | Informações do usuário |
+| PUT    | /users/perfil   | Atualiza informações   |
+
+---
 
 ## 📄 Licença
 
-Este projeto está licenciado sob os termos da [Licença MIT](./LICENSE).
+Este projeto está sob a licença **MIT**. Consulte o arquivo [LICENSE](./LICENSE).
