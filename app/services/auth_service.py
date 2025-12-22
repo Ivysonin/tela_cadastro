@@ -61,7 +61,7 @@ class AuthService:
         if not check_password_hash(user.senha_hash, senha):
             return {"error": "Senha incorreta"}, 401
 
-        login_user(user)
+        login_user(user, remember=True)
         return {"message": "Login realizado com sucesso"}, 200
 
     @staticmethod
