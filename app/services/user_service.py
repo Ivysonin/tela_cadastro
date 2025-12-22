@@ -3,7 +3,6 @@ from app.schemas.user_schema import UserSchema
 from marshmallow import ValidationError
 from app.models.user_model import User
 from app import db
-import re
 
 
 class UserService:
@@ -34,12 +33,6 @@ class UserService:
             validated = schema.load(data_for_schema)
         except ValidationError as err:
             return {"errors": err.messages}, 400
-
-        if "nome" in validated:
-            nome = validated["nome"].strip()
-            if not re.match(r"^[A-Za-zÀ-ÿ\s]{3,}$", nome):
-                return {"error": "Nome inválido: mínimo 3 letras"}, 400
-            user.nome = nome
 
         if "email" in validated:
             email = validated["email"].lower()

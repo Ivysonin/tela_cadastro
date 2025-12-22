@@ -4,7 +4,6 @@ from app.models.user_model import User
 from marshmallow import ValidationError
 from app.schemas.user_schema import UserSchema
 from app import db
-import re
 
 
 class AuthService:
@@ -31,14 +30,8 @@ class AuthService:
         nome = data["nome"].strip()
         email = data["email"].lower()
 
-        if not re.match(r"^[A-Za-zÀ-ÿ\s]{3,}$", nome):
-            return {"error": "Nome inválido"}, 400
-        
         if User.query.filter_by(email=email).first():
             return {"error": "E-mail já cadastrado"}, 409
-
-        if len(data["senha"]) < 6:
-            return {"error": "Senha muito curta"}, 400
 
         user = User(
             nome=nome,
