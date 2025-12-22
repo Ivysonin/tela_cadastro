@@ -52,6 +52,10 @@ Crie um `.env`:
 ```
 SECRET_KEY='chave_secreta'
 DATABASE_URI='sqlite:///database.db'
+
+# configurações de sessão/cookies
+SESSION_COOKIE_HTTPONLY=True
+SESSION_COOKIE_SAMESITE="Lax"
 ```
 
 ### 4. Inicializar o banco
