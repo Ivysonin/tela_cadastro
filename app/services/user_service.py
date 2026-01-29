@@ -2,7 +2,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from app.schemas.user_schema import UserSchema
 from marshmallow import ValidationError
 from app.models.user_model import User
-from app import db
+from app.core.exceptions import UnauthorizedException, ValidationException
+from app.extensions import db
 
 
 class UserService:
@@ -32,32 +33,35 @@ class UserService:
         try:
             validated = schema.load(data_for_schema)
         except ValidationError as err:
-            return {"errors": err.messages}, 400
+            raise ValidationException(errors=err.messages)
+
+        if "nome" in validated:
+            user.nome = validated["nome"].strip()
 
         if "email" in validated:
             email = validated["email"].lower()
             if User.query.filter(User.email == email, User.id != user.id).first():
-                return {"error": "E-mail já cadastrado"}, 409
+                raise ValidationException(message="E-mail já cadastrado", errors={'email':"Já existe um usuário com este e-mail"})
             user.email = email
 
         senha_atual = data.get("senha_atual")
         nova_senha = data.get("nova_senha")
         confirmar_senha = data.get("confirmar_senha")
-        
+
         if senha_atual and nova_senha and confirmar_senha:
             # Verifica se a senha atual está correta
             if not check_password_hash(user.senha_hash, senha_atual):
-                return {"error": "Senha atual incorreta"}, 400
+                raise UnauthorizedException("Senha incorreta")
 
             # Verifica tamanho mínimo
             if len(nova_senha) < 6:
-                return {"error": "A nova senha deve ter no mínimo 6 caracteres"}, 400
+                raise ValidationException("A nova senha deve ter no mínimo 6 caracteres")
 
             # Verifica se nova senha e confirmação coincidem
             if nova_senha != confirmar_senha:
-                return {"error": "As senhas não coincidem"}, 400
+                raise ValidationException("As senhas não coincidem")
 
             user.senha_hash = generate_password_hash(nova_senha)
 
         db.session.commit()
-        return {"message": "Usuário atualizado com sucesso"}, 200
+        return user

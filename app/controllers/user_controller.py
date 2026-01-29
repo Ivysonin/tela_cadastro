@@ -1,7 +1,8 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request
 from flask_login import login_required, current_user
 from app.schemas.user_schema import UserSchema
 from app.services.user_service import UserService
+from app.core.response import success
 
 
 user_bp = Blueprint("user", __name__)
@@ -12,7 +13,8 @@ schema = UserSchema()
 @login_required
 def profile():
     schema = UserSchema(exclude=["senha"])
-    return jsonify(schema.dump(current_user)), 200
+
+    return success("Informações do usuário", data=schema.dump(current_user))
 
 
 @user_bp.route("/perfil", methods=["PUT"])
@@ -20,8 +22,6 @@ def profile():
 def update_user():
     data = request.get_json()
 
-    if not data:
-        return jsonify({"error": "JSON não enviado"}), 400
+    user = UserService.update_user(current_user, data)
 
-    response, status = UserService.update_user(current_user, data)
-    return jsonify(response), status
+    return success("Usuário atualizado", data=schema.dump(user))
