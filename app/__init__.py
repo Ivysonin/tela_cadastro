@@ -1,13 +1,7 @@
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
-from flask_login import LoginManager
 from app.config import Config
-
-
-db = SQLAlchemy()
-migrate = Migrate()
-login_manager = LoginManager()
+from app.extensions import db, migrate, login_manager
+from app.core.handlers import register_error_handlers
 
 
 def create_app():
@@ -22,6 +16,7 @@ def create_app():
     from app.controllers.user_controller import user_bp
     app.register_blueprint(user_bp, url_prefix="/user")
     app.register_blueprint(auth_bp, url_prefix="/auth")
+    register_error_handlers(app)
 
     from app.models import user_model
     from app.models.user_model import User
