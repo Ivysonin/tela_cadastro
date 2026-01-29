@@ -3,6 +3,7 @@ from werkzeug.security import generate_password_hash ,check_password_hash
 from app.models.user_model import User
 from marshmallow import ValidationError
 from app.schemas.user_schema import UserSchema
+from app.core.exceptions import NotFoundException, UnauthorizedException, ValidationException
 from app import db
 
 
@@ -24,14 +25,13 @@ class AuthService:
         try:
             validated = schema.load(data)
         except ValidationError as err:
-            return {"errors": err.messages}, 400
-        
+            raise ValidationException(errors=err.messages)
 
         nome = data["nome"].strip()
         email = data["email"].lower()
 
         if User.query.filter_by(email=email).first():
-            return {"error": "E-mail já cadastrado"}, 409
+            raise ValidationException(message="E-mail já cadastrado", errors={'email':"Já existe um usuário com este e-mail"})
 
         user = User(
             nome=nome,
@@ -42,29 +42,30 @@ class AuthService:
         db.session.add(user)
         db.session.commit()
 
-        return {"message": "Usuário registrado com sucesso"}, 201
+        return user
 
     @staticmethod
-    def login(email, senha):
+    def login(data):
         """
         data = {
             "email": "",
             "senha": ""
         }
         """
+        email = data.get("email")
+        senha = data.get("senha")
 
         user = User.query.filter_by(email=email.lower()).first()
 
         if not user:
-            return {"error": "Usuário não encontrado"}, 404
+            raise NotFoundException("Usuário não encontrado")
 
         if not check_password_hash(user.senha_hash, senha):
-            return {"error": "Senha incorreta"}, 401
+            raise UnauthorizedException("Senha incorreta")
 
         login_user(user, remember=True)
-        return {"message": "Login realizado com sucesso"}, 200
+        return user
 
     @staticmethod
     def logout():
         logout_user()
-        return {"message": "Logout realizado com sucesso"}, 204

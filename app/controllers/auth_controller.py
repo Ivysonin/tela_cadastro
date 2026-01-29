@@ -1,42 +1,34 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request
 from flask_login import login_required
 from app.services.auth_service import AuthService
+from app.schemas.user_schema import UserSchema
+from app.core.response import success
 
 
 auth_bp = Blueprint("auth", __name__)
+schema = UserSchema()
 
 
 @auth_bp.route('/register', methods=["POST"])
 def register_user():
     data = request.get_json()
 
-    if not data:
-        return jsonify({"error": "JSON não enviado"}), 400
-    
-    response, status = AuthService.register(data)
+    user = AuthService.register(data)
 
-    return jsonify(response), status
+    return success("Usuário registrado com sucesso", data=schema.dump(user))
 
 
 @auth_bp.route("/login", methods=["POST"])
 def login_user():
     data = request.get_json()
 
-    if not data:
-        return jsonify({"error": "JSON não enviado"}), 400
+    AuthService.login(data)
 
-    email = data.get("email")
-    senha = data.get("senha")
-
-    if not email or not senha:
-        return jsonify({"error": "Email e senha são obrigatórios"}), 400
-
-    response, status = AuthService.login(email, senha)
-    return jsonify(response), status
+    return success("Login realizado com sucesso")
 
 
 @auth_bp.route("/logout", methods=["POST"])
 @login_required
 def logout_user():
-    response, status = AuthService.logout()
-    return jsonify(response), status
+    AuthService.logout()
+    return success("", status=204)
